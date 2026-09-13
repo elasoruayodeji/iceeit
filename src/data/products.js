@@ -1,30 +1,29 @@
 // PLACEHOLDER DATA.
-// Images point to local files in /public/images/products/ — to use your own
-// photo, just replace that file (keep the same filename) or change the path
-// below to a new file you've added to that folder. No code changes needed
-// beyond this file.
-// Prices are in Naira (NGN) — these are placeholder numbers, edit freely.
-// To add a product: copy a block below, give it a unique id, and fill in the fields.
+// Images/videos point to local files in /public/images/... — to use your own
+// file, just replace it (keep the same filename) or change the path below.
+// Prices are in Naira (NGN) — placeholder numbers, edit freely.
+
+const BASE = import.meta.env.BASE_URL;
 
 export const PRODUCTS = [
-  { id: 'p1', name: 'Frostbite Puffer Jacket', price: 140000, category: 'essentials',
-    image: '/images/products/p1.mp4',
-    sizes: ['S', 'M', 'L', 'XL'], colors: ['Ice Grey'] },
-  { id: 'p2', name: 'Round neck', price: 30000, category: 'essentials',
-    image: '/images/products/p2.mp4',
-    sizes: ['S', 'M', 'L', 'XL'], colors: ['Black', 'white'] },
-  { id: 'p3', name: 'Harmless', price: 20000, category: 'accessories',
-    image: '/images/products/p3.mp4',
+  { id: 'p1', name: 'Frostbite Puffer Jacket', price: 185000, category: 'outerwear',
+    image: `${BASE}images/products/p1.mp4`,
     sizes: ['S', 'M', 'L', 'XL'], colors: ['Black', 'Ice Grey'] },
-  { id: 'p4', name: 'Tank Top', price: 12000, category: 'outerwear',
-    image: '/images/products/p4.mp4',
+  { id: 'p2', name: 'Glacier Shell Coat', price: 210000, category: 'outerwear',
+    image: `${BASE}images/products/p2.mp4`,
     sizes: ['S', 'M', 'L', 'XL'], colors: ['Black'] },
-  { id: 'p5', name: 'Double band gogger', price: 60000, category: 'essentials',
-    image: '/images/products/p5.mp4',
+  { id: 'p3', name: 'Cold Front Hoodie', price: 45000, category: 'essentials',
+    image: `${BASE}images/products/p3.mp4`,
+    sizes: ['XS', 'S', 'M', 'L', 'XL'], colors: ['Black', 'White', 'Ice Grey'] },
+  { id: 'p4', name: 'Thermal Crew Tee', price: 20000, category: 'essentials',
+    image: `${BASE}images/products/p4.mp4`,
+    sizes: ['XS', 'S', 'M', 'L', 'XL'], colors: ['Black', 'White'] },
+  { id: 'p5', name: 'Permafrost Beanie', price: 15000, category: 'accessories',
+    image: `${BASE}images/products/p5.mp4`,
     sizes: ['One Size'], colors: ['Black', 'Ice Grey'] },
-  { id: 'p6', name: 'Jersey', price: 30000, category: 'essentials', 
-    image: '/images/products/p6.mp4',
-    sizes: ['M', 'L', 'XL'] },
+  { id: 'p6', name: 'Drift Cargo Pants', price: 55000, category: 'essentials',
+    image: `${BASE}images/products/p6.mp4`,
+    sizes: ['S', 'M', 'L', 'XL'], colors: ['Black', 'Stone'] },
 ];
 
 export const CATEGORIES = ['outerwear', 'essentials', 'accessories'];

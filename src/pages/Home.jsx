@@ -16,7 +16,7 @@ export default function Home() {
       <section className="hero">
         <img
   className="hero-img"
-  src="/images/hero/hero.jpg"
+  src={`${import.meta.env.BASE_URL}images/hero/hero.jpg`}
   width="1400"
   height="1750"
   alt="Model wearing an ICEEIT cold-weather jacket on a city street"
@@ -33,15 +33,15 @@ export default function Home() {
         <h2>Shop by category</h2>
         <div className="category-grid">
           <Link to="/shop?category=outerwear" className="category-tile large">
-            <video src="/images/categories/outerwear.mp4" width="900" height="1100" autoPlay loop muted playsInline />
+            <video src={`${import.meta.env.BASE_URL}images/categories/outerwear.mp4`} width="900" height="1100" autoPlay loop muted playsInline />
             <span className="category-label">Outerwear</span>
           </Link>
           <Link to="/shop?category=essentials" className="category-tile">
-            <video src="/images/categories/essentials.mp4" width="700" height="850" autoPlay loop muted playsInline />
+            <video src={`${import.meta.env.BASE_URL}images/categories/essentials.mp4`} width="700" height="850" autoPlay loop muted playsInline />
             <span className="category-label">Essentials</span>
           </Link>
           <Link to="/shop?category=accessories" className="category-tile">
-            <video src="/images/categories/accessories.mp4" width="700" height="850" autoPlay loop muted playsInline />
+            <video src={`${import.meta.env.BASE_URL}images/categories/accessories.mp4`} width="700" height="850" autoPlay loop muted playsInline />
             <span className="category-label">Accessories</span>
           </Link>
         </div>
