@@ -5,10 +5,30 @@ import ProductCard from '../components/ProductCard';
 
 export default function Home() {
   const [subscribed, setSubscribed] = useState(false);
+  const [email, setEmail] = useState('');
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
 
-  function handleNewsletterSubmit(e) {
+  async function handleNewsletterSubmit(e) {
     e.preventDefault();
-    setSubscribed(true);
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch('https://formspree.io/f/mppwazrd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email, form: 'Newsletter signup' }),
+      });
+      if (res.ok) {
+        setSubscribed(true);
+      } else {
+        setError(true);
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -70,9 +90,18 @@ export default function Home() {
         {subscribed ? (
           <p className="newsletter-success">You're on the list.</p>
         ) : (
-          <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
-            <input type="email" placeholder="Email address" required />
-            <button type="submit" className="btn btn-primary">Sign up</button>
+                  <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+            <input
+              type="email"
+              placeholder="Email address"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button type="submit" className="btn btn-primary" disabled={sending}>
+              {sending ? 'Sending...' : 'Sign up'}
+            </button>
+            {error && <p className="newsletter-error">Something went wrong — try again.</p>}
           </form>
         )}
       </section>

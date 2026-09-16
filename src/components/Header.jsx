@@ -8,7 +8,6 @@ export default function Header() {
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
 
-  // Lock page scroll while the mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : '';
   }, [menuOpen]);
@@ -17,9 +16,13 @@ export default function Header() {
     return `nav-link${isActive ? ' active' : ''}`;
   }
 
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
   return (
     <>
-    
+      <div className="announce-bar">Free shipping on orders over 100k</div>
 
       <header className="site-header">
         <div className="header-inner">
@@ -32,24 +35,25 @@ export default function Header() {
             <span></span><span></span><span></span>
           </button>
 
-          <Link to="/" className="wordmark" onClick={() => setMenuOpen(false)}>ICEEIT</Link>
+          <Link to="/" className="wordmark" onClick={closeMenu}>ICEEIT</Link>
 
-          <nav className={`main-nav ${menuOpen ? 'open' : ''}`}>
-            <NavLink to="/" end className={navLinkClass} onClick={() => setMenuOpen(false)}>Home</NavLink>
-            <NavLink to="/shop" className={navLinkClass} onClick={() => setMenuOpen(false)}>Shop</NavLink>
-            <NavLink to="/about" className={navLinkClass} onClick={() => setMenuOpen(false)}>About</NavLink>
-            <NavLink to="/contact" className={navLinkClass} onClick={() => setMenuOpen(false)}>Contact</NavLink>
-            <NavLink to="/faq" className={navLinkClass} onClick={() => setMenuOpen(false)}>FAQ</NavLink>
+          {/* Desktop nav lives here — hidden on mobile via CSS */}
+          <nav className="main-nav main-nav-desktop">
+            <NavLink to="/" end className={navLinkClass}>Home</NavLink>
+            <NavLink to="/shop" className={navLinkClass}>Shop</NavLink>
+            <NavLink to="/about" className={navLinkClass}>About</NavLink>
+            <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
+            <NavLink to="/faq" className={navLinkClass}>FAQ</NavLink>
           </nav>
 
           <div className="header-actions">
-            <Link to="/wishlist" className="icon-btn" aria-label="View wishlist" onClick={() => setMenuOpen(false)}>
+            <Link to="/wishlist" className="icon-btn" aria-label="View wishlist" onClick={closeMenu}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d="M12 20s-7-4.4-9.5-8.8C.7 8 2 4.5 5.4 4c2-.3 3.7.7 4.6 2.2C10.9 4.7 12.6 3.7 14.6 4c3.4.5 4.7 4 3 7.2C19.1 15.6 12 20 12 20z" />
               </svg>
               <span className="badge">{wishlistCount}</span>
             </Link>
-            <Link to="/cart" className="icon-btn" aria-label="View cart" onClick={() => setMenuOpen(false)}>
+            <Link to="/cart" className="icon-btn" aria-label="View cart" onClick={closeMenu}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d="M6 8h12l-1 12H7L6 8z" />
                 <path d="M9 8V6a3 3 0 0 1 6 0v2" />
@@ -59,6 +63,19 @@ export default function Header() {
           </div>
         </div>
       </header>
+
+      {/* Mobile full-screen nav — rendered OUTSIDE the header on purpose.
+          The header uses backdrop-filter (frosted glass), and that breaks
+          position:fixed for anything nested inside it. Keeping this as a
+          sibling of <header>, not a child, is what makes it cover the
+          full screen correctly on mobile. */}
+      <nav className={`main-nav-mobile ${menuOpen ? 'open' : ''}`}>
+        <NavLink to="/" end className={navLinkClass} onClick={closeMenu}>Home</NavLink>
+        <NavLink to="/shop" className={navLinkClass} onClick={closeMenu}>Shop</NavLink>
+        <NavLink to="/about" className={navLinkClass} onClick={closeMenu}>About</NavLink>
+        <NavLink to="/contact" className={navLinkClass} onClick={closeMenu}>Contact</NavLink>
+        <NavLink to="/faq" className={navLinkClass} onClick={closeMenu}>FAQ</NavLink>
+      </nav>
     </>
   );
 }
