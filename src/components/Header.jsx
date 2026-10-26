@@ -1,81 +1,80 @@
+import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 
+const NAV = [
+  { to: '/', label: 'Index', end: true },
+  { to: '/shop', label: 'Shop' },
+  { to: '/about', label: 'About' },
+  { to: '/faq', label: 'FAQ' },
+  { to: '/contact', label: 'Contact' },
+];
+
+function BagIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path d="M6 8h12l-1 12H7L6 8Z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" />
+    </svg>
+  );
+}
+function HeartIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+      <path d="M12 20s-7-4.6-7-9.5A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.5C19 15.4 12 20 12 20Z" />
+    </svg>
+  );
+}
+
 export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-  }, [menuOpen]);
-
-  function navLinkClass({ isActive }) {
-    return `nav-link${isActive ? ' active' : ''}`;
-  }
-
-  function closeMenu() {
-    setMenuOpen(false);
-  }
+  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <div className="announce-bar">Free shipping on orders over 100k</div>
+    <header className="site-header">
+      <div className="container header-inner">
+        <Link to="/" className="logo" aria-label="ICEEIT home">
+          <span className="logo-mark" aria-hidden="true">I</span>
+          <span className="logo-word">ICEE<span>IT</span></span>
+        </Link>
 
-      <header className="site-header">
-        <div className="header-inner">
+        <nav className={`main-nav${open ? ' open' : ''}`} aria-label="Primary" id="primary-nav">
+          {NAV.map((n) => (
+            <NavLink
+              key={n.to}
+              to={n.to}
+              end={n.end}
+              className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+              onClick={() => setOpen(false)}
+            >
+              {n.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="header-actions">
+          <Link to="/wishlist" className="icon-btn" aria-label={`Wishlist, ${wishlistCount} items`}>
+            <HeartIcon />
+            {wishlistCount > 0 && <span className="count-badge">{wishlistCount}</span>}
+          </Link>
+          <Link to="/cart" className="icon-btn" aria-label={`Cart, ${cartCount} items`}>
+            <BagIcon />
+            {cartCount > 0 && <span className="count-badge">{cartCount}</span>}
+          </Link>
           <button
-            className={`menu-toggle ${menuOpen ? 'open' : ''}`}
-            aria-label="Open menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
+            className="icon-btn menu-toggle"
+            aria-expanded={open}
+            aria-controls="primary-nav"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            onClick={() => setOpen((o) => !o)}
           >
-            <span></span><span></span><span></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+              {open ? <path d="M5 5l14 14M19 5L5 19" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+            </svg>
           </button>
-
-          <Link to="/" className="wordmark" onClick={closeMenu}>ICEEIT</Link>
-
-          {/* Desktop nav lives here — hidden on mobile via CSS */}
-          <nav className="main-nav main-nav-desktop">
-            <NavLink to="/" end className={navLinkClass}>Home</NavLink>
-            <NavLink to="/shop" className={navLinkClass}>Shop</NavLink>
-            <NavLink to="/about" className={navLinkClass}>About</NavLink>
-            <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
-            <NavLink to="/faq" className={navLinkClass}>FAQ</NavLink>
-          </nav>
-
-          <div className="header-actions">
-            <Link to="/wishlist" className="icon-btn" aria-label="View wishlist" onClick={closeMenu}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M12 20s-7-4.4-9.5-8.8C.7 8 2 4.5 5.4 4c2-.3 3.7.7 4.6 2.2C10.9 4.7 12.6 3.7 14.6 4c3.4.5 4.7 4 3 7.2C19.1 15.6 12 20 12 20z" />
-              </svg>
-              <span className="badge">{wishlistCount}</span>
-            </Link>
-            <Link to="/cart" className="icon-btn" aria-label="View cart" onClick={closeMenu}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                <path d="M6 8h12l-1 12H7L6 8z" />
-                <path d="M9 8V6a3 3 0 0 1 6 0v2" />
-              </svg>
-              <span className="badge">{cartCount}</span>
-            </Link>
-          </div>
         </div>
-      </header>
-
-      {/* Mobile full-screen nav — rendered OUTSIDE the header on purpose.
-          The header uses backdrop-filter (frosted glass), and that breaks
-          position:fixed for anything nested inside it. Keeping this as a
-          sibling of <header>, not a child, is what makes it cover the
-          full screen correctly on mobile. */}
-      <nav className={`main-nav-mobile ${menuOpen ? 'open' : ''}`}>
-        <NavLink to="/" end className={navLinkClass} onClick={closeMenu}>Home</NavLink>
-        <NavLink to="/shop" className={navLinkClass} onClick={closeMenu}>Shop</NavLink>
-        <NavLink to="/about" className={navLinkClass} onClick={closeMenu}>About</NavLink>
-        <NavLink to="/contact" className={navLinkClass} onClick={closeMenu}>Contact</NavLink>
-        <NavLink to="/faq" className={navLinkClass} onClick={closeMenu}>FAQ</NavLink>
-      </nav>
-    </>
+      </div>
+    </header>
   );
 }

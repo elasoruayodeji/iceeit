@@ -1,32 +1,36 @@
 import { Link } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
-import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/ProductCard';
+import { useWishlist } from '../context/WishlistContext';
 
 export default function Wishlist() {
   const { wishlist } = useWishlist();
-  const products = PRODUCTS.filter((p) => wishlist.includes(p.id));
+  const items = PRODUCTS.filter((p) => wishlist.includes(p.id));
 
-  if (products.length === 0) {
+  if (items.length === 0) {
     return (
-      <div className="page-placeholder">
-        <h1>Your wishlist</h1>
-        <p>Nothing saved yet — tap the heart on any product to add it here.</p>
-        <Link to="/shop" className="btn btn-primary">Browse the shop</Link>
+      <div className="container empty-state">
+        <h2>Wishlist Empty</h2>
+        <p>Tap the ♡ on any piece to freeze it here for later.</p>
+        <Link to="/shop" className="btn btn-solid">Browse the drop →</Link>
       </div>
     );
   }
 
   return (
-    <div className="shop-page">
-      <div className="shop-header">
-        <h1>Your wishlist</h1>
-      </div>
-      <div className="product-grid">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-    </div>
+    <>
+      <section className="page-hero">
+        <div className="container">
+          <p className="breadcrumbs"><Link to="/">Index</Link> / Wishlist</p>
+          <h1 className="display">Your <em style={{ fontStyle: 'normal', WebkitTextStroke: '1.5px var(--cyan)', color: 'transparent' }}>Wishlist</em></h1>
+          <p>{items.length} {items.length === 1 ? 'piece' : 'pieces'} kept on ice.</p>
+        </div>
+      </section>
+      <section className="container section" aria-label="Wishlisted products">
+        <div className="grid-products">
+          {items.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+        </div>
+      </section>
+    </>
   );
 }
